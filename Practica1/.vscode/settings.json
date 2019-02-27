@@ -31,7 +31,8 @@
         "optional": "cpp",
         "sstream": "cpp",
         "tuple": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "deque": "cpp"
     },
     "terminal.integrated.shell.windows": "cmd.exe"
 }
