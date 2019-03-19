@@ -1,0 +1,12 @@
+basicamente cuando hacemos el NumnberBase* operator+(NumnberBase * n )const, hay que hacer:
+un number<N,B,T> *s=dynamic_Cast<const Number<N,b,t>> y comprobar que la s
+no apunte a nulo para comprobar si son de la misma base.(lo mismo con el operator -)
+
+El duplicar no interesa copiar pero que no se cambie, por eso creamos return new NUmber<N,B;T>(*this)
+Baiscamente retornar un new del constructor de copia.
+
+Utilidad del duplicate para la suma.
+Number<N,B,T> *x=duplicate, x=(*this)+s, return *x;  Se que parece estupido pero si no hacemos esto
+solo crearemos un a variavle locasl que sera destruida al finalizar.
+
+prog principal punteros  anumverbase preguntados por el usuario.
