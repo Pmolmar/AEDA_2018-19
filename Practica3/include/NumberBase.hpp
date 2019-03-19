@@ -7,12 +7,6 @@ class NumberBase
   private:
     int base;
     int digit;
-    NumberBase(int B, int N) : base(B), digit(N)
-    {
-        if (base < 2 || digit < 1)
-            throw wrong_number_exception();
-    };
-    ~NumberBase(){};
 
   protected:
     virtual void to_base(int val) = 0;
@@ -20,6 +14,12 @@ class NumberBase
     virtual NumberBase *duplicate() const = 0;
 
   public:
+    NumberBase(int B, int N) : base(B), digit(N)
+    {
+        if (base < 2 || digit < 1)
+            throw wrong_number_exception();
+    };
+    ~NumberBase(){};
     virtual NumberBase *operator+(const NumberBase *) const = 0;
     virtual NumberBase *operator-(const NumberBase *) const = 0;
 };

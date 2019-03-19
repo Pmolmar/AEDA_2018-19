@@ -4,7 +4,7 @@
 #include <cmath>
 
 template <int B, int N, class T>
-Number<B, N, T>::Number(int val)
+Number<B, N, T>::Number(int val):NumberBase(B,N)
 {
     num = new T[N];
     if (pow(B, N) < val)
@@ -18,13 +18,13 @@ Number<B, N, T>::~Number()
     delete[] num;
 }
 
-template <int B, int N, class T>
-Number<B, N, T>::Number(const Number<B, N, T> &a)
-{
-    a.set_sign(signo);
-    for (int i = 0; i < N; ++i)
-        a.set_val(num[i], i);
-}
+// template <int B, int N, class T>
+// Number<B, N, T>::Number(const Number<B, N, T> &a)
+// {
+//     a.set_sig(signo);
+//     for (int i = 0; i < N; ++i)
+//         a.set_val(num[i], i);
+// }
 
 template <int B, int N, class T>
 void Number<B, N, T>::to_base(int val)
@@ -143,39 +143,61 @@ void Number<B, N, T>::set_sig(int x)
     signo = x;
 }
 
+//nuevo
+
 template <int B, int N, class T>
-Number<B, N, T> *Number<B, N, T>::duplicate() const
+NumberBase *Number<B, N, T>::duplicate() const
 {
-    return new Number<N, B, T>(*this);
+    return new Number<B,N, T>(*this);
 }
 
 template <int B, int N, class T>
-Number<B, N, T> *Number<B, N, T>::operator+(const  Number *n) const
+NumberBase *Number<B, N, T>::operator+(NumberBase *num) const
 {
-    *n = dynamic_cast<const Number<B,N,T>>;
-    if (n != NULL)
+    Number<N,B,T> *sum=dynamic_cast<const Number<N,B,T>*>(num);
+    if (sum != NULL)
     {
-        Number<B,N,T> *x=duplicate();
-        x.suma(n);
-        return *x;
+        NumberBase resul = duplicate();
+        resul=*this + sum;
+        NumberBase *fin=dynamic_cast<const Number<N,B,T>*>(resul);
+        return fin;
     }
     else
         throw wrong_number_exception();
 }
 
 template <int B, int N, class T>
-Number<B, N, T> *Number<B, N, T>::operator-(const  Number *n) const
+Number<B, N, T> *Number<B, N, T>::operator+(const  Number<B,N,T> *num) const
 {
-    const  Number<B,N,T> *s = dynamic_cast<const  Number<B,N,T> *>(n);
-    if (s != NULL)
+    return suma(num);
+}
+
+template <int B, int N, class T>
+NumberBase *Number<B, N, T>::operator-(NumberBase *num) const
+{
+    Number<N,B,T> *sum=dynamic_cast<const Number<N,B,T>*>(num);
+    sum.set_sing(sum.sign*-1);
+    if (sum != NULL)
     {
-         Number<B,N,T> *x = dynamic_cast< Number<B,N,T> *>(duplicate());
-        s.set_sign(-1*s.sign());
-        (*x) = suma(*s);
-        return x;
+        NumberBase resul = duplicate();
+        resul=*this + sum;
+        NumberBase *fin=dynamic_cast<const Number<N,B,T>*>(resul);
+        return fin;
     }
     else
         throw wrong_number_exception();
+}
+
+template <int B, int N, class T>
+Number<B, N, T> *Number<B, N, T>::operator-(const  Number<B,N,T> *num) const
+{
+    return suma(num);
+}
+
+template <int B,int N, class T>
+std::ostream& Number<B,N,T>::operator <<(Number<B,N,T>* num)const
+{
+    return num.write(std::cout);
 }
 
 //--------------------------------------------------------------------
@@ -185,7 +207,7 @@ Number<B, N, T> *Number<B, N, T>::operator-(const  Number *n) const
 //--------------------------------------------------------------------
 
 template <int N, class T>
-Number<2, N, T>::Number(int val)
+Number<2, N, T>::Number(int val):NumberBase(2,N)
 {
     num = new T[N];
     if (pow(2, N) < val)
@@ -199,13 +221,13 @@ Number<2, N, T>::~Number()
     delete[] num;
 }
 
-template <int N, class T>
-Number<2, N, T>::Number(const Number<2, N, T> &a)
-{
-    a.set_sign(signo);
-    for (int i = 0; i < N; ++i)
-        a.set_val(num[i], i);
-}
+// template <int N, class T>
+// Number<2, N, T>::Number(const Number<2, N, T> &a)
+// {
+//     a.set_sig(signo);
+//     for (int i = 0; i < N; ++i)
+//         a.set_val(num[i], i);
+// }
 
 template <int N, class T>
 void Number<2, N, T>::to_base(int val)
@@ -333,8 +355,55 @@ void Number<2, N, T>::set_sig(int x)
     signo = x;
 }
 
+//nuevo
+
 template <int N, class T>
-Number<2, N, T> *Number<2, N, T>::duplicate() const
+NumberBase *Number<2, N, T>::duplicate() const
 {
     return new Number<2, N, T>(*this);
+}
+
+template <int N, class T>
+NumberBase *Number<2, N, T>::operator+(const  NumberBase *num) const
+{
+    Number<2, N, T> *sum = dynamic_cast<const Number<2, N, T>>(num);
+    if (sum != NULL)
+    {
+        Number<2, N, T> *resul= dynamic_cast<Number<2, N, T>*>(duplicate());
+        return *resul=*this + *sum;
+    }
+    else
+        throw wrong_number_exception();
+}
+
+template <int N, class T>
+Number<2, N, T> *Number<2, N, T>::operator+(const  Number<2, N, T> *num) const
+{
+    return suma(num);
+}
+
+template <int N, class T>
+NumberBase *Number<2, N, T>::operator-(const  NumberBase *num) const
+{
+   Number<2, N, T> *sum = dynamic_cast<const Number<2, N, T>>(num);
+    sum.set_sing(sum.sign*-1);
+    if (sum != NULL)
+    {
+        Number<2, N, T> *resul= dynamic_cast<Number<2, N, T>*>(duplicate());
+        return *resul=*this + *sum;
+    }
+    else
+        throw wrong_number_exception();
+}
+
+template <int N, class T>
+Number<2, N, T> *Number<2, N, T>::operator-(const  Number<2, N, T> *num) const
+{
+    return suma(num);
+}
+
+template <int N, class T>
+std::ostream& Number<2,N,T>::operator <<(Number<2,N,T>* num)const
+{
+    return num.write(std::cout);
 }

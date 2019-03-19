@@ -14,25 +14,27 @@ private:
 public:
     Number(int val=0);
     ~Number();
-    Number(const Number<B,N,T>& a);
+    // Number(const Number<B,N,T>& a);
 
     Number<B,N,T> suma(const Number<B,N,T>& op)const;
     Number<B,N,T>& operator =(const Number<B,N,T>& copy);
 
+    operator Number<B,N+1,T> ( )const;
     int mayor(const Number<B,N,T>& op)const;
     void set_val(int x, int pos);
     void set_sig(int x);
 
-    operator Number<B,N+1,T> ( )const;
-
     std::ostream& write(std::ostream& os)const;
-    Number<B,N,T> *operator+(const Number *)const;
-    Number<B,N,T> *operator-(const Number *)const;
-    Number<B,N,T> *duplicate()const;
+    Number<B,N,T> *operator+(const Number<B,N,T> *num)const;
+    Number<B,N,T> *operator-(const Number<B,N,T> *num)const;
+    NumberBase *operator+(NumberBase *num)const;
+    NumberBase *operator-(NumberBase *num)const;
+    std::ostream& operator <<(Number<B,N,T>* num)const;    
+    NumberBase *duplicate()const;
 };
 
 template<int N, class T>
-class Number <2,N,T>
+class Number <2,N,T>: public NumberBase
 {
 private:
     T* num;
@@ -43,7 +45,7 @@ private:
 public:
     Number(int val=0);
     ~Number();
-    Number(const Number<2,N,T>& a);
+    // Number(const Number<2,N,T>& a);
 
     Number<2,N,T> suma(const Number<2,N,T>& op)const; 
     Number<2,N,T>& operator =(const Number<2,N,T>& copy);  
@@ -53,33 +55,40 @@ public:
     void set_sig(int x);
 
     std::ostream& write(std::ostream& os)const;
-    Number<2,N,T> *operator+(const Number *)const;
-    Number<2,N,T> *operator-(const Number *)const;
-    Number<2,N,T> *duplicate()const;
+    Number<2,N,T> *operator+(const Number<2,N,T> *num)const;
+    Number<2,N,T> *operator-(const Number<2,N,T> *num)const;
+    NumberBase *operator+(const NumberBase *num)const;
+    NumberBase *operator-(const NumberBase *num)const;
+    std::ostream& operator <<(Number<2,N,T>* num)const;
+    NumberBase *duplicate()const;
 };
 
-class binary: public Number<2,8>
+template<class T>
+class binary: public Number<2,8,T>
 {
     public:
-        binary(int num): Number<2,8>(num){}
+        binary(int num): Number<2,8,T>(num){}
 };
 
-class octal: public Number<8,8>
+template<class T>
+class octal: public Number<8,8,T>
 {
     public:
-        octal(int num): Number<8,8>(num){}
+        octal(int num): Number<8,8,T>(num){}
 };
 
-class decimal: public Number<10,8>
+template<class T>
+class decimal: public Number<10,8,T>
 {
     public:
-        decimal(int num): Number<10,8>(num){}
+        decimal(int num): Number<10,8,T>(num){}
 };
 
-class hexadec: public Number<16,8>
+template<class T>
+class hexadec: public Number<16,8,T>
 {
     public:
-        hexadec(int num): Number<16,8>(num){}
+        hexadec(int num): Number<16,8,T>(num){}
 };
 
 #include "../src/Number.tpp"
