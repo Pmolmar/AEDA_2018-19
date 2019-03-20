@@ -10,7 +10,7 @@ class NumberBase
 
   protected:
     virtual void to_base(int val) = 0;
-    virtual std::ostream &write(std::ostream &) const = 0;
+    virtual std::ostream &write(std::ostream& os) const = 0;
     virtual NumberBase *duplicate() const = 0;
 
   public:
@@ -20,6 +20,12 @@ class NumberBase
             throw wrong_number_exception();
     };
     ~NumberBase(){};
-    virtual NumberBase *operator+(const NumberBase *) const = 0;
-    virtual NumberBase *operator-(const NumberBase *) const = 0;
+    virtual NumberBase operator+(const NumberBase *) const = 0;
+    virtual NumberBase operator-(const NumberBase *) const = 0;
+    friend std::ostream& operator <<(std::ostream& os,const NumberBase& nu);
+
 };
+std::ostream& operator <<(std::ostream& os,const NumberBase& nu)
+{
+return nu.write(os);
+}

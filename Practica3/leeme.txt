@@ -1,0 +1,9 @@
+No he conseguido plantear la modificacion ni que el programa
+funcine correctamente, he planteado como deberia de funcionar
+pero tengo algo mal con los parametros de memorio (me refiero
+a punteros y referencia), lo maximo a lo que he llegado a sido
+a imprimir los numeros usted mismo lo vio, pero las operaciones
+fallan, intente que devolvieran ovjetos en vez de punteros
+pero no lo he conseguido hace funcionar, no espero que se me
+evalue, pero si espero que se tenga en cuenta el tiempo
+invertido.

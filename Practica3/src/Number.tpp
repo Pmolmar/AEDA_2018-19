@@ -18,13 +18,14 @@ Number<B, N, T>::~Number()
     delete[] num;
 }
 
-// template <int B, int N, class T>
-// Number<B, N, T>::Number(const Number<B, N, T> &a)
-// {
-//     a.set_sig(signo);
-//     for (int i = 0; i < N; ++i)
-//         a.set_val(num[i], i);
-// }
+template <int B, int N, class T>
+Number<B, N, T>::Number(Number<B, N, T> *a):NumberBase(B,N)
+{
+    a->num= new T[N];
+    a->set_sig(signo);
+    for (int i = 0; i < N; ++i)
+        a->set_val(num[i], i);
+}
 
 template <int B, int N, class T>
 void Number<B, N, T>::to_base(int val)
@@ -57,18 +58,19 @@ void Number<B, N, T>::to_base(int val)
 //ejecuta el f-1=e y despues simplemente 0-1, el resultado es
 // 1e pero deberia de ser -2, no se como sulucionarlo
 template <int B, int N, class T>
-Number<B, N, T> Number<B, N, T>::suma(const Number<B, N, T> &op) const
+Number<B, N, T> Number<B, N, T>::suma(const Number<B, N, T> *op) const
 {
     Number<B,N,T> aux;
+
     int carry = 0;
     for (int i = 0; i < N; i++)
     {
-        int val= num[i]*signo+op.num[i]*op.signo+carry;
+        int val= num[i]*signo+op->num[i]*op->signo+carry;
         aux.num[i]= abs(val)%B;
         carry= val/B;
     }
 
-    aux.set_sig(mayor(op));
+    aux->set_sig(mayor(op));
 
     if (carry > 0)
         throw Overflow();
@@ -105,14 +107,14 @@ Number<B, N, T> &Number<B, N, T>::operator=(const Number<B, N, T> &copy)
 }
 
 template <int B, int N, class T>
-int Number<B, N, T>::mayor(const Number<B, N, T> &op) const
+int Number<B, N, T>::mayor(const Number<B, N, T> *op) const
 {
     for (int i = N - 1; i >= 0; i--)
     {
-        if (num[i] > op.num[i])
+        if (num[i] > op->num[i])
             return signo;
-        else if (num[i] < op.num[i])
-            return op.signo;
+        else if (num[i] < op->num[i])
+            return op->signo;
     }
     return signo;
 }
@@ -148,63 +150,62 @@ void Number<B, N, T>::set_sig(int x)
 template <int B, int N, class T>
 NumberBase *Number<B, N, T>::duplicate() const
 {
-    return new Number<B,N, T>(*this);
+    return new Number<B,N,T>;
 }
 
 template <int B, int N, class T>
-NumberBase *Number<B, N, T>::operator+(NumberBase *num) const
+NumberBase Number<B, N, T>::operator+(const NumberBase *nu) const
 {
-    Number<N,B,T> *sum=dynamic_cast<const Number<N,B,T>*>(num);
+    const Number<B,N,T> *sum=dynamic_cast<Number<B,N,T>*>(const_cast<NumberBase*>(nu));
     if (sum != NULL)
     {
-        NumberBase resul = duplicate();
-        resul=*this + sum;
-        NumberBase *fin=dynamic_cast<const Number<N,B,T>*>(resul);
-        return fin;
+        Number<B,N,T> *resul= dynamic_cast<Number<B,N,T>*>(duplicate());
+        resul=(*this) + sum;
+        return resul;
     }
     else
         throw wrong_number_exception();
 }
 
 template <int B, int N, class T>
-Number<B, N, T> *Number<B, N, T>::operator+(const  Number<B,N,T> *num) const
+Number<B, N, T> Number<B, N, T>::operator+(const  Number<B,N,T> *nu)const
 {
-    return suma(num);
+    return suma(nu);
 }
 
 template <int B, int N, class T>
-NumberBase *Number<B, N, T>::operator-(NumberBase *num) const
+NumberBase Number<B, N, T>::operator-(const NumberBase *nu) const
 {
-    Number<N,B,T> *sum=dynamic_cast<const Number<N,B,T>*>(num);
-    sum.set_sing(sum.sign*-1);
+    const Number<B,N,T> *sum=dynamic_cast<Number<B,N,T>*>(const_cast<NumberBase*>(nu));    
     if (sum != NULL)
     {
-        NumberBase resul = duplicate();
-        resul=*this + sum;
-        NumberBase *fin=dynamic_cast<const Number<N,B,T>*>(resul);
-        return fin;
+        Number<B,N,T> *resul= dynamic_cast<Number<B,N,T>*>(duplicate());
+        resul=(*this) - sum;
+        return resul;
     }
     else
         throw wrong_number_exception();
 }
 
 template <int B, int N, class T>
-Number<B, N, T> *Number<B, N, T>::operator-(const  Number<B,N,T> *num) const
+Number<B, N, T> Number<B, N, T>::operator-(const  Number<B,N,T> *nu)const
 {
-    return suma(num);
+    return suma(nu);
 }
 
 template <int B,int N, class T>
-std::ostream& Number<B,N,T>::operator <<(Number<B,N,T>* num)const
+std::ostream& operator <<(std::ostream& os,const Number<B,N,T>& nu)
 {
-    return num.write(std::cout);
+    return nu.write(os);
 }
+
 
 //--------------------------------------------------------------------
 
 //especializacion binaria de number
 
 //--------------------------------------------------------------------
+
 
 template <int N, class T>
 Number<2, N, T>::Number(int val):NumberBase(2,N)
@@ -221,13 +222,14 @@ Number<2, N, T>::~Number()
     delete[] num;
 }
 
-// template <int N, class T>
-// Number<2, N, T>::Number(const Number<2, N, T> &a)
-// {
-//     a.set_sig(signo);
-//     for (int i = 0; i < N; ++i)
-//         a.set_val(num[i], i);
-// }
+template<int N, class T>
+Number<2, N, T>::Number(Number<2, N, T> *a):NumberBase(2,N)
+{
+    a->num= new T[N];
+    a->set_sig(signo);
+    for (int i = 0; i < N; ++i)
+        a->set_val(num[i], i);
+}
 
 template <int N, class T>
 void Number<2, N, T>::to_base(int val)
@@ -261,8 +263,8 @@ void Number<2, N, T>::to_base(int val)
 template <int N, class T>
 void Number<2, N, T>::complementador()
 {
-    Number<2, N> aux;
-    aux.to_base(1);
+    Number<2, N> *aux;
+    aux->to_base(1);
 
     for (int i = 0; i < N; i++)
     {
@@ -272,24 +274,23 @@ void Number<2, N, T>::complementador()
             num[i] = 1;
     }
 
-    *this = suma(aux);
+    this->num = suma(aux)->num;
 }
 
 template <int N, class T>
-Number<2, N, T> Number<2, N, T>::suma(const Number<2, N, T> &op) const
+Number<2, N, T> Number<2, N, T>::suma(const Number<2, N, T> *op) const
 {
-    Number<2, N> aux;
+    Number<2,N,T> aux;
+
     int carry = 0;
     for (int i = 0; i < N; i++)
     {
-        aux.num[i] = (num[i] + op.num[i] + carry) % 2;
-        if (num[i] + op.num[i] + carry >= 2)
-            carry = 1;
-        else
-            carry = 0;
+        int val= num[i]*signo+op->num[i]*op->signo+carry;
+        aux.num[i]= abs(val)%2;
+        carry= val/2;
     }
 
-    if (carry > 0 && op.signo != -1 || carry > 0 && signo != -1)
+    if (carry > 0)
         throw Overflow();
 
     return aux;
@@ -360,50 +361,52 @@ void Number<2, N, T>::set_sig(int x)
 template <int N, class T>
 NumberBase *Number<2, N, T>::duplicate() const
 {
-    return new Number<2, N, T>(*this);
+    return new Number<2, N, T>;
 }
 
 template <int N, class T>
-NumberBase *Number<2, N, T>::operator+(const  NumberBase *num) const
+NumberBase Number<2, N, T>::operator+(const  NumberBase *nu) const
 {
-    Number<2, N, T> *sum = dynamic_cast<const Number<2, N, T>>(num);
+    const Number<2,N,T> *sum=dynamic_cast<Number<2,N,T>*>(const_cast<NumberBase*>(nu));    
     if (sum != NULL)
     {
-        Number<2, N, T> *resul= dynamic_cast<Number<2, N, T>*>(duplicate());
-        return *resul=*this + *sum;
+        Number<2,N,T> *resul= dynamic_cast<Number<2,N,T>*>(duplicate());
+        resul=(*this) + sum;
+        return resul;
     }
     else
         throw wrong_number_exception();
 }
 
 template <int N, class T>
-Number<2, N, T> *Number<2, N, T>::operator+(const  Number<2, N, T> *num) const
+Number<2, N, T> Number<2, N, T>::operator+(const  Number<2, N, T> *nu) const
 {
-    return suma(num);
+    return suma(nu);    
 }
 
 template <int N, class T>
-NumberBase *Number<2, N, T>::operator-(const  NumberBase *num) const
+NumberBase Number<2, N, T>::operator-(const  NumberBase *nu) const
 {
-   Number<2, N, T> *sum = dynamic_cast<const Number<2, N, T>>(num);
-    sum.set_sing(sum.sign*-1);
+    const Number<2,N,T> *sum=dynamic_cast<Number<2,N,T>*>(const_cast<NumberBase*>(nu));    
     if (sum != NULL)
     {
-        Number<2, N, T> *resul= dynamic_cast<Number<2, N, T>*>(duplicate());
-        return *resul=*this + *sum;
+        Number<2,N,T> *resul= dynamic_cast<Number<2,N,T>*>(duplicate());
+        resul=(*this) - sum;
+        return resul;
     }
     else
         throw wrong_number_exception();
 }
 
 template <int N, class T>
-Number<2, N, T> *Number<2, N, T>::operator-(const  Number<2, N, T> *num) const
+Number<2, N, T> Number<2, N, T>::operator-(const  Number<2, N, T> *nu) const
 {
-    return suma(num);
+    return suma(nu);    
 }
 
 template <int N, class T>
-std::ostream& Number<2,N,T>::operator <<(Number<2,N,T>* num)const
+std::ostream& operator <<(std::ostream& os,const Number<2,N,T>& nu)
 {
-    return num.write(std::cout);
+    return nu.write(os);
+    
 }
