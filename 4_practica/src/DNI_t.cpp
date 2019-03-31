@@ -1,23 +1,25 @@
 #include "DNI_t.hpp"
 
-DNI_t::DNI_t():
-dni_(rand()%99999999)
+cont_t DNI_t::cont;
+
+DNI_t::DNI_t() : dni_(rand() % 99999999)
 {
 }
 
-DNI_t::~DNI_t() 
-{}
-
-bool DNI_t::operator ==(const DNI_t& x)
+DNI_t::~DNI_t()
 {
-    ++cont;
-    return dni_==x.get_DNI();
 }
 
-bool DNI_t::operator <(const DNI_t& x) 
+bool DNI_t::operator==(const DNI_t &x)
 {
     ++cont;
-    return dni_<x.get_DNI();
+    return dni_ == x.get_DNI();
+}
+
+bool DNI_t::operator<(const DNI_t &x)
+{
+    ++cont;
+    return dni_ < x.get_DNI();
 }
 
 int DNI_t::get_DNI() const

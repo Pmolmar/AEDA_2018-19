@@ -1,22 +1,26 @@
 #pragma once
 #include <iostream>
 
-template<class T>
-class func_disp_t {
+template <class T>
+class func_disp_t
+{
 
-public:
+  public:
     func_disp_t();
     ~func_disp_t();
-    virtual void dispersion ()=0;
+    virtual void dispersion() = 0;
 };
 
-template<class T>
-class func_suma_t: public func_disp
+template <class T>
+class func_suma_t : public func_disp
 {
-public:
+  private:
+    int sz_;
+
+  public:
     func_suma_t();
     ~func_suma_t();
-    virtual void dispersion ();
+    virtual void dispersion();
 };
 
 #include "../src/func_disp_t.tpp"
