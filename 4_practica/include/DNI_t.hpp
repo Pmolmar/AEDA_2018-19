@@ -13,5 +13,5 @@ class DNI_t
     ~DNI_t();
     bool operator==(const DNI_t &x);
     bool operator<(const DNI_t &x);
-    int get_DNI() const;
+    int get() const;
 };

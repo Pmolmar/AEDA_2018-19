@@ -4,23 +4,20 @@
 template <class T>
 class func_disp_t
 {
-
-  public:
-    func_disp_t();
-    ~func_disp_t();
-    virtual void dispersion() = 0;
+public:
+  func_disp_t(){};
+  ~func_disp_t(){};
+  virtual int dispersion(const T &val, const int &sz) = 0;
 };
 
 template <class T>
-class func_suma_t : public func_disp
+class disp_lineal_t : public func_disp_t<T>
 {
-  private:
-    int sz_;
-
-  public:
-    func_suma_t();
-    ~func_suma_t();
-    virtual void dispersion();
+public:
+  disp_lineal_t(){};
+  ~disp_lineal_t(){};
+  virtual int dispersion(const T &val, const int &sz)
+  {
+    return val.get() % sz;
+  }
 };
-
-#include "../src/func_disp_t.tpp"

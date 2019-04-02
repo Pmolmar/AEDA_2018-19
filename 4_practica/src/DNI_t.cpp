@@ -13,16 +13,16 @@ DNI_t::~DNI_t()
 bool DNI_t::operator==(const DNI_t &x)
 {
     ++cont;
-    return dni_ == x.get_DNI();
+    return dni_ == x.get();
 }
 
 bool DNI_t::operator<(const DNI_t &x)
 {
     ++cont;
-    return dni_ < x.get_DNI();
+    return dni_ < x.get();
 }
 
-int DNI_t::get_DNI() const
+int DNI_t::get() const
 {
     return dni_;
 }
