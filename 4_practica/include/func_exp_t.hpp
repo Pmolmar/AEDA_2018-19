@@ -5,7 +5,6 @@
 template <class T>
 class func_exp_t
 {
-
 public:
   func_exp_t(){};
   ~func_exp_t(){};
@@ -15,14 +14,16 @@ public:
 template <class T>
 class exp_redisp_t : public func_exp_t<T>
 {
+  int sz_;
+
 public:
-  exp_redisp_t(){};
+  exp_redisp_t(int sz) : sz_(sz){};
   ~exp_redisp_t(){};
   virtual int exploracion(const T &val, const int &i)
   {
     srand(val.get());
     for (int j = 0; j < i; ++j)
       rand();
-    return rand();
+    return rand() % sz_;
   }
 };

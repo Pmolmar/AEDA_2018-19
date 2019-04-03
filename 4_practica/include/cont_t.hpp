@@ -2,12 +2,14 @@
 
 class cont_t
 {
-  unsigned int cont_;
+  int con_;
 
 public:
-  cont_t() : cont_(0){};
+  cont_t() : con_(1){};
   ~cont_t(){};
-  void reset() { cont_ = 0; };
-  void operator++() { cont_++; };
-  unsigned int get_cont() { return cont_; };
+  void operator++() { ++con_;};
+  void reset() {con_=1;};
+  int get_cont()const {return con_;};
+  void set_cont(int x) {con_=x;};
+
 };

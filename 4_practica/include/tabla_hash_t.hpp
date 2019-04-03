@@ -1,16 +1,19 @@
 #pragma once
 #include <iostream>
 
+#include "exepciones_t.hpp"
 #include "celda_t.hpp"
 #include "func_disp_t.hpp"
 #include "func_exp_t.hpp"
+#include "cont_t.hpp"
+#include "DNI_t.hpp"
 
 template <class T>
 class tabla_hash_t
 {
 private:
   int nCeldas, nBloques;
-  celda_t<T> *V;
+  celda_t<T> **V;
   func_disp_t<T> *D;
   func_exp_t<T> *E;
 
