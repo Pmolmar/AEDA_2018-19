@@ -45,6 +45,6 @@ int main()
         a[i] = new DNI_t;
         hash.buscar(*a[i]);
     }
-    std::cout<<"Buscar\t\t"<<DNI_t::max.get_cont()<<"\t"<<DNI_t::cont.get_cont()/2*int(factor)<<"\t"<<DNI_t::min.get_cont();
+    std::cout<<"Buscar\t\t"<<DNI_t::max.get_cont()<<"\t"<<DNI_t::cont.get_cont()/(2*int(factor))<<"\t"<<DNI_t::min.get_cont();
     std::cout << std::endl;
 }
