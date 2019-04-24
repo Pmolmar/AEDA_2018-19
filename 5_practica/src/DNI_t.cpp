@@ -1,4 +1,4 @@
-#include "DNI_t.hpp"
+#include "../include/DNI_t.hpp"
 
 cont_t DNI_t::cont;
 
